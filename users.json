@@ -1,0 +1,33 @@
+[
+  {
+    "id": 0,
+    "name": "janne",
+    "pwd": "test",
+    "newsletter": true
+  },
+  {
+    "id": 1,
+    "name": "kalle",
+    "pwd": "anka",
+    "newsletter": true
+  },
+  {
+    "id": 2,
+    "name": "musse",
+    "pwd": "pigg",
+    "newsletter": false
+  },
+  {
+    "id": "SVRSDN0GFN7tiX1U",
+    "name": "klarabella",
+    "pwd": "ko",
+    "newsletter": true
+  },
+  {
+    "id": "sATVwTPFHbnX3l7g",
+    "name": "mimmi",
+    "pwd": "pigg",
+    "mail": "mail@mail",
+    "newsletter": true
+  }
+]
