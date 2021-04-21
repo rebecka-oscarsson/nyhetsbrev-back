@@ -29,7 +29,7 @@ router.post('/', (req, res) => {
     }
     let id = rand.generate(); //generera random id
     let newUser = new User(id, name, password, mail, newsletter);
-    activeUser = id;
+    let activeUser = id;
     console.log("användare från regformulär:", newUser)
 
     req.app.locals.myDatabase.collection("users").insertOne(newUser).then(result => {
@@ -38,14 +38,9 @@ router.post('/', (req, res) => {
     })
 });
 
-//loggar ut
-router.get('/logout', function (req, res) {
-    activeUser = null;
-    res.redirect("http://127.0.0.1:5500/");
-});
 
 //startvärde, problem om det används men det händer nog bara om servern startar om
-let activeUser = null;
+// let activeUser = null;
 
 /* GET users listing. */
 // router.get('/activeUser', function (req, res, next) {
@@ -56,11 +51,9 @@ let activeUser = null;
 router.post('/login', (req, res) => {
     console.log("mottaget ", req.body.name);
     req.app.locals.myDatabase.collection("users").find().toArray().then(users => {
-        // console.log("alla användare", users);
-        activeUser = login(users, req.body.name, req.body.pwd);
+        let activeUser = login(users, req.body.name, req.body.pwd);
         console.log("svar", activeUser)
         res.json(JSON.stringify(activeUser));
-        // res.redirect("http://127.0.0.1:5500/?id=" + activeUser)
     })
 })
 
@@ -83,18 +76,18 @@ router.get('/userData/:userId', (req, res) => {
 function login(users, userNameInput, passwordInput) {
     for (index in users) {
         if (users[index].name == userNameInput && users[index].pwd == passwordInput) {
-            activeUser = users[index].id;
+            let activeUser = users[index].id;
             console.log("inloggad: ", users[index].name);
             return activeUser
         } else if (users[index].name == userNameInput) {
             // console.log("fel lösen");
-            activeUser = "incorrect";
+            let activeUser = "incorrect";
             return activeUser
             // console.log("fel lösen");
         }
     }
     //console.log("fel namn");
-    activeUser = "incorrect";
+    let activeUser = "incorrect";
     return activeUser;
 }
 
