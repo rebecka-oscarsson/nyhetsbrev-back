@@ -28,6 +28,6 @@
     "name": "mimmi",
     "pwd": "pigg",
     "mail": "mail@mail",
-    "newsletter": true
+    "newsletter": false
   }
 ]
