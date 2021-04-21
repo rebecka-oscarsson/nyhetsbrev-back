@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const fs = require("fs");
 const cors = require("cors"); //jag behöver köra npm install cors
+const crypto = require("crypto-js");
 router.use(cors());
 var rand = require("random-key");
 
@@ -21,6 +22,11 @@ class User {
 router.post('/', (req, res) => {
     let name = req.body.name;
     let password = req.body.pwd;
+
+    let secretPassword = crypto.AES.encrypt(password, "hemligt").toString();
+    console.log("krypterat ", secretPassword)
+    let original = crypto.AES.decrypt(secretPassword, "hemligt").toString(crypto.enc.Utf8);
+    console.log("okrypterat ", original)
     let mail = req.body.email;
     let newsletter = false;
     if (req.body.newsletter) //om det är ikryssat så skickas "on" annars undefined
@@ -30,10 +36,10 @@ router.post('/', (req, res) => {
     let id = rand.generate(); //generera random id
     let newUser = new User(id, name, password, mail, newsletter);
     let activeUser = id;
-    console.log("användare från regformulär:", newUser)
+    // console.log("användare från regformulär:", newUser)
 
     req.app.locals.myDatabase.collection("users").insertOne(newUser).then(result => {
-        console.log(result);
+        console.log("kanske kan tas bort", result);
         res.json(JSON.stringify(activeUser));
     })
 });

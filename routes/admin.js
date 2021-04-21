@@ -67,11 +67,11 @@ router.post('/login', (req, res) => {
 })
 
 //en funktion som hämtar alla användare från databasen och kör funktionen makeUserlist 
-router.get('/welcome', (req, res) => {
-    req.app.locals.myDatabase.collection("users").find().toArray().then(users => {
-        let userList = makeUserList(users)
-        res.send(userList)
-    })
-})
+// router.get('/welcome', (req, res) => {
+//     req.app.locals.myDatabase.collection("users").find().toArray().then(users => {
+//         let userList = makeUserList(users)
+//         res.send(userList)
+//     })
+// })
 
 module.exports = router;
