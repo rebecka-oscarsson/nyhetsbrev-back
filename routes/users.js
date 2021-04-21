@@ -34,7 +34,7 @@ router.post('/', (req, res) => {
 
     req.app.locals.myDatabase.collection("users").insertOne(newUser).then(result => {
         console.log(result);
-        res.redirect("http://127.0.0.1:5500/?id=" + activeUser);
+        res.json(JSON.stringify(activeUser));
     })
 });
 
@@ -48,9 +48,9 @@ router.get('/logout', function (req, res) {
 let activeUser = null;
 
 /* GET users listing. */
-router.get('/activeUser', function (req, res, next) {
-    res.json(activeUser);
-});
+// router.get('/activeUser', function (req, res, next) {
+//     res.json(activeUser);
+// });
 
 //inloggning
 router.post('/login', (req, res) => {
