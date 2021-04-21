@@ -23,10 +23,10 @@ router.post('/', (req, res) => {
     let name = req.body.name;
     let password = req.body.pwd;
 
-    let secretPassword = crypto.AES.encrypt(password, "hemligt").toString();
+    let secretPassword = crypto.AES.encrypt(password, "hemligNyckel").toString();
     console.log("krypterat ", secretPassword)
-    let original = crypto.AES.decrypt(secretPassword, "hemligt").toString(crypto.enc.Utf8);
-    console.log("okrypterat ", original)
+    // let original = crypto.AES.decrypt(secretPassword, "hemligNyckel").toString(crypto.enc.Utf8);
+    // console.log("okrypterat ", original)
     let mail = req.body.email;
     let newsletter = false;
     if (req.body.newsletter) //om det är ikryssat så skickas "on" annars undefined
@@ -34,7 +34,7 @@ router.post('/', (req, res) => {
         newsletter = true
     }
     let id = rand.generate(); //generera random id
-    let newUser = new User(id, name, password, mail, newsletter);
+    let newUser = new User(id, name, secretPassword, mail, newsletter);
     let activeUser = id;
     // console.log("användare från regformulär:", newUser)
 
@@ -81,7 +81,8 @@ router.get('/userData/:userId', (req, res) => {
 
 function login(users, userNameInput, passwordInput) {
     for (index in users) {
-        if (users[index].name == userNameInput && users[index].pwd == passwordInput) {
+        let originalPwd = crypto.AES.decrypt(users[index].pwd, "hemligNyckel").toString(crypto.enc.Utf8);
+        if (users[index].name == userNameInput && originalPwd == passwordInput) {
             let activeUser = users[index].id;
             console.log("inloggad: ", users[index].name);
             return activeUser
