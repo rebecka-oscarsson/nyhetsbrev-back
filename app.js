@@ -9,8 +9,11 @@ var adminRouter = require('./routes/admin');
 
 var app = express();
 
+let mongoUrlLocal = "mongodb://127.0.0.1:27017";
+let mongoUrl = "mongodb+srv://rebecka:hemligtpwd@cluster1.ho8up.mongodb.net/nyhetsbrev?retryWrites=true&w=majority";
+
 const myMongo = require('mongodb').MongoClient;
-myMongo.connect("mongodb://127.0.0.1:27017", {
+myMongo.connect(mongoUrl, {
 useUnifiedTopology:true}).then(client => {console.log("uppkopplad mot databas");
 const myDatabase = client.db("nyhetsbrev");
 app.locals.myDatabase = myDatabase})
