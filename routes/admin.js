@@ -6,7 +6,8 @@ router.use(cors());
 let adminId = "topphemligtId"
 let pwd = "admin";
 let loggedIn = null;
-let url = "http://localhost:3000";
+let url = "https://nyhetsbrev-kiwi.herokuapp.com/"
+let urlLocal = "http://localhost:3000";
 
 const loginTemplate = `<h2>Admin login</h2>
 <form id="loginForm" method="post" action="/admin">
