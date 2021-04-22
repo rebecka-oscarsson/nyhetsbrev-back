@@ -44,15 +44,6 @@ router.post('/', (req, res) => {
     })
 });
 
-
-//startvärde, problem om det används men det händer nog bara om servern startar om
-// let activeUser = null;
-
-/* GET users listing. */
-// router.get('/activeUser', function (req, res, next) {
-//     res.json(activeUser);
-// });
-
 //inloggning
 router.post('/login', (req, res) => {
     // console.log("mottaget ", req.body.name);
