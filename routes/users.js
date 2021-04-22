@@ -24,7 +24,7 @@ router.post('/', (req, res) => {
     let password = req.body.pwd;
 
     let secretPassword = crypto.AES.encrypt(password, "hemligNyckel").toString();
-    console.log("krypterat ", secretPassword)
+    // console.log("krypterat ", secretPassword)
     // let original = crypto.AES.decrypt(secretPassword, "hemligNyckel").toString(crypto.enc.Utf8);
     // console.log("okrypterat ", original)
     let mail = req.body.email;
@@ -55,25 +55,33 @@ router.post('/', (req, res) => {
 
 //inloggning
 router.post('/login', (req, res) => {
-    console.log("mottaget ", req.body.name);
+    // console.log("mottaget ", req.body.name);
     req.app.locals.myDatabase.collection("users").find().toArray().then(users => {
         let activeUser = login(users, req.body.name, req.body.pwd);
-        console.log("svar", activeUser)
+        // console.log("svar", activeUser)
         res.json(JSON.stringify(activeUser));
     })
 })
 
 //en funktion som hittar användare efter id och returnerar ett objekt {namn, nyhetsbrev}
 router.get('/userData/:userId', (req, res) => {
-    console.log(req.params.userId);
+    // console.log(req.params.userId);
     var query = {
         id: req.params.userId
     };
     req.app.locals.myDatabase.collection("users").findOne(query)
         .then(matchingUser => {
-            let foundUser = {
-                "name": matchingUser.name,
-                "newsletter": matchingUser.newsletter
+            let foundUser
+            if (matchingUser) {
+                foundUser = {
+                    "name": matchingUser.name,
+                    "newsletter": matchingUser.newsletter
+                }
+            } else {
+                foundUser = {
+                    "name": "okänd användare",
+                    "newsletter": false
+                }
             }
             res.json(foundUser)
         })
@@ -101,10 +109,17 @@ function login(users, userNameInput, passwordInput) {
 //tar emot ett objekt med formatet {id, newsletter}
 //returnerar true eller false
 router.post('/changeNewsLetter', (req, res) => {
-    req.app.locals.myDatabase.collection("users").updateOne({"id": req.body.id}, {$set: {"newsletter": req.body.newsletter}})
-        .then(matchingUser => {console.log("tjoho", matchingUser)
-        res.send(JSON.stringify(req.body.newsletter))//behöver jag egentligen skicka något?
-    })
+    req.app.locals.myDatabase.collection("users").updateOne({
+            "id": req.body.id
+        }, {
+            $set: {
+                "newsletter": req.body.newsletter
+            }
+        })
+        .then(matchingUser => {
+            // console.log("tjoho", matchingUser)
+            res.send(JSON.stringify(req.body.newsletter)) //behöver jag egentligen skicka något?
+        })
 })
 
 module.exports = router;
