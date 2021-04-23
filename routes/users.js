@@ -34,8 +34,7 @@ router.post('/', (req, res) => {
     let newUser = new User(id, name, secretPassword, mail, newsletter);
     let activeUser = id;
 
-    req.app.locals.myDatabase.collection("users").insertOne(newUser).then(result => {
-        console.log("kanske kan tas bort", result);
+    req.app.locals.myDatabase.collection("users").insertOne(newUser).then(()=> {
         res.json(JSON.stringify(activeUser));
     })
 });
