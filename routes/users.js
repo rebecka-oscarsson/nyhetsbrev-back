@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
     let newsletter = false;
     if (req.body.newsletter) //om det är ikryssat så skickas "on" annars undefined
     {
-        newsletter = true
+        newsletter = true;
     }
     let id = rand.generate(); //generera random id
     let newUser = new User(id, name, secretPassword, mail, newsletter);
