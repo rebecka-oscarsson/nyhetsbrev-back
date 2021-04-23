@@ -9,22 +9,27 @@ const pwd = "admin";
 let loggedIn = null;
 
 //inloggningsformulär
-const loginTemplate = `<h2>Admin login</h2>
-<form id="loginForm" method="post" action="/">
+const loginTemplate = `<link rel="stylesheet" href="https://rebecka-oscarsson.github.io/nyhetsbrev/stylesheets/style.css">
+<h2>Admin login</h2>
+<form method="post" class ="admin" action="/">
 <label for="password">Lösenord:</label>
-<input type="password" id="password" name="pwd" required>
-<button id="loginBtn" type="submit">logga in</button>
+<input class = admin type="password" name="pwd" required>
+<br>
+<button type="submit">logga in</button>
+<br><br>
+<a href="https://rebecka-oscarsson.github.io/nyhetsbrev/" class="admin">länk till användar-vyn</a>
 </form>
-<a href="https://rebecka-oscarsson.github.io/nyhetsbrev/">länk till användar-vyn</a>`
+<br>`
+
 
 //meddelande vid fel lösenord
 const errorTemplate = "<p>Något gick fel med inloggningen, försök igen!</p>"
 
 //en funktion som genererar en tabell med mailadress och prenumeration för alla användare
 function makeUserList(users) {
-    let userList = `
+    let userList = `<link rel="stylesheet" href="https://rebecka-oscarsson.github.io/nyhetsbrev/stylesheets/style.css">
 <h2>Välkommen Admin!</h2>
-<h3>Dina registrerade användare:</h3>
+<h3 class = "admin">Dina registrerade användare:</h3>
 <table>
 <tr>
 <th colspan ="2">Prenumererar på nyhetsbrev</th>
@@ -59,8 +64,9 @@ function makeUserList(users) {
         }
     }
     
-    userList += `</table><br><form id="logoutForm" method="get" action="/logout">
-    <button id="logoutBtn" type="submit">logga ut</button>`
+    userList += `</table><br><form class = "admin" method="get" action="/logout">
+    <button type="submit">logga ut</button></form>
+    `
     return userList;
 }
 
