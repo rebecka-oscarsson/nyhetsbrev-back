@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const cors = require("cors"); //man behöver köra npm install cors
+const cors = require("cors");
 router.use(cors());
 
 //globala variabler
@@ -20,29 +20,45 @@ const loginTemplate = `<h2>Admin login</h2>
 //meddelande vid fel lösenord
 const errorTemplate = "<p>Något gick fel med inloggningen, försök igen!</p>"
 
-//en funktion som genererar en tabell med mailadress och prenumeration (ja/nej) för alla användare
+//en funktion som genererar en tabell med mailadress och prenumeration för alla användare
 function makeUserList(users) {
-    let newsletter;
     let userList = `
 <h2>Välkommen Admin!</h2>
 <h3>Dina registrerade användare:</h3>
 <table>
 <tr>
-  <th>Mailadress</th>
-  <th>Nyhetsbrev?</th>
+<th colspan ="2">Prenumererar på nyhetsbrev</th>
+<tr>
+  <th>Namn</th>
+  <th>E-mail</th>
 </tr>`
     for (user in users) {
         if (users[user].newsletter) {
-            newsletter = "ja"
-        } else {
-            newsletter = "nej"
-        }
-        userList += `
+            userList += `
     <tr>
+      <td>${users[user].name}</td>
       <td>${users[user].mail}</td>
-      <td>${newsletter}</td>
     </tr>`
+        }
     }
+
+    userList += `<tr>
+    <th colspan ="2"><br>Prenumererar inte</th>
+    <tr>
+      <th>Namn</th>
+      <th>E-mail</th>
+    </tr>`
+
+    for (user in users) {
+        if (!users[user].newsletter) {
+            userList += `
+    <tr>
+      <td>${users[user].name}</td>
+      <td>${users[user].mail}</td>
+    </tr>`
+        }
+    }
+    
     userList += `</table><br><form id="logoutForm" method="get" action="/logout">
     <button id="logoutBtn" type="submit">logga ut</button>`
     return userList;

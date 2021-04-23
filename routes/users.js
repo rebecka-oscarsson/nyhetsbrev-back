@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
-const fs = require("fs");
-const cors = require("cors"); //jag behöver köra npm install cors
+const cors = require("cors");
 const crypto = require("crypto-js");
 router.use(cors());
 var rand = require("random-key");
+const saltKey = "nfmbO9Fl8VvSmBbMrfNBUO76FTvmOgWJ"; //nyckel för att kryptera lösenord
 
 
 //en klass som jag kan använda för att skapa objekt
@@ -23,20 +23,16 @@ router.post('/', (req, res) => {
     let name = req.body.name;
     let password = req.body.pwd;
 
-    let secretPassword = crypto.AES.encrypt(password, "hemligNyckel").toString();
-    // console.log("krypterat ", secretPassword)
-    // let original = crypto.AES.decrypt(secretPassword, "hemligNyckel").toString(crypto.enc.Utf8);
-    // console.log("okrypterat ", original)
+    let secretPassword = crypto.AES.encrypt(password, saltKey).toString();
     let mail = req.body.email;
     let newsletter = false;
-    if (req.body.newsletter) //om det är ikryssat så skickas "on" annars undefined
+    if (req.body.newsletter) //om det är ikryssat kommer "on" från formuläret annars undefined
     {
         newsletter = true;
     }
-    let id = rand.generate(); //generera random id
+    let id = rand.generate();
     let newUser = new User(id, name, secretPassword, mail, newsletter);
     let activeUser = id;
-    // console.log("användare från regformulär:", newUser)
 
     req.app.locals.myDatabase.collection("users").insertOne(newUser).then(result => {
         console.log("kanske kan tas bort", result);
@@ -44,19 +40,17 @@ router.post('/', (req, res) => {
     })
 });
 
-//inloggning
+//hämtar alla användare från databas och skickar in som parameter i login-funktionen.
+//returnerar id för inloggad användare
 router.post('/login', (req, res) => {
-    // console.log("mottaget ", req.body.name);
     req.app.locals.myDatabase.collection("users").find().toArray().then(users => {
         let activeUser = login(users, req.body.name, req.body.pwd);
-        // console.log("svar", activeUser)
         res.json(JSON.stringify(activeUser));
     })
 })
 
-//en funktion som hittar användare efter id och returnerar ett objekt {namn, nyhetsbrev}
+//hittar användare med rätt id och returnerar ett objekt {namn, nyhetsbrev}
 router.get('/userData/:userId', (req, res) => {
-    // console.log(req.params.userId);
     var query = {
         id: req.params.userId
     };
@@ -78,23 +72,22 @@ router.get('/userData/:userId', (req, res) => {
         })
 })
 
+
+//kontrollerar skickat användarnamn och lösenord i databasen, returnerar användar-id om korrekt
 function login(users, userNameInput, passwordInput) {
     for (index in users) {
-        let originalPwd = crypto.AES.decrypt(users[index].pwd, "hemligNyckel").toString(crypto.enc.Utf8);
+        let originalPwd = crypto.AES.decrypt(users[index].pwd, saltKey).toString(crypto.enc.Utf8);
         if (users[index].name == userNameInput && originalPwd == passwordInput) {
             let activeUser = users[index].id;
             console.log("inloggad: ", users[index].name);
             return activeUser
         } else if (users[index].name == userNameInput) {
-            // console.log("fel lösen");
-            let activeUser = "incorrect";
+            let activeUser = "incorrect"; //fel lösenord;
             return activeUser
-            // console.log("fel lösen");
         }
     }
-    //console.log("fel namn");
-    let activeUser = "incorrect";
-    return activeUser;
+    let activeUser = "incorrect";//fel användarnamn;
+    return activeUser;   
 }
 
 //tar emot ett objekt med formatet {id, newsletter}
@@ -107,10 +100,8 @@ router.post('/changeNewsLetter', (req, res) => {
                 "newsletter": req.body.newsletter
             }
         })
-        .then(matchingUser => {
-            // console.log("tjoho", matchingUser)
-            res.send(JSON.stringify(req.body.newsletter)) //behöver jag egentligen skicka något?
-        })
+        .then(res.send(JSON.stringify(req.body.newsletter))
+        )
 })
 
 module.exports = router;
