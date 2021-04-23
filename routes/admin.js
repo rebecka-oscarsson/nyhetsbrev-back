@@ -14,7 +14,8 @@ const loginTemplate = `<h2>Admin login</h2>
 <label for="password">Lösenord:</label>
 <input type="password" id="password" name="pwd" required>
 <button id="loginBtn" type="submit">logga in</button>
-</form>`
+</form>
+<a href="https://rebecka-oscarsson.github.io/nyhetsbrev/">länk till användar-vyn</a>`
 
 //meddelande vid fel lösenord
 const errorTemplate = "<p>Något gick fel med inloggningen, försök igen!</p>"
