@@ -10,9 +10,9 @@ let loggedIn = null;
 
 //inloggningsformulär
 const loginTemplate = `<link rel="stylesheet" href="https://rebecka-oscarsson.github.io/nyhetsbrev/stylesheets/style.css">
-<h2>Admin login</h2>
+<h2 class="adminHeader">Admin login</h2>
 <form method="post" class ="admin" action="/">
-<label for="password">Lösenord:</label>
+<label for="password">Lösenord (det är "admin"):</label>
 <input class = admin type="password" name="pwd" required>
 <br>
 <button type="submit">logga in</button>
