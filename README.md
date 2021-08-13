@@ -1,3 +1,6 @@
+## En websida med login och registrering av användare
+Med Node, express, MongoDB, crypto.js
+
 ## hur du startar projektet lokalt:
 1) ladda ner projektmappen och navigera till den i kommandotolken
 2) skriv npm install
